@@ -4,23 +4,28 @@
   "version": "1.0.0",
   "scripts": {
     "build": "rsbuild build",
-    "dev": "rsbuild dev --open",
-    "preview": "rsbuild preview",
+    "dev": "node ./server.mjs",
+    "preview": "node ./server-prod.mjs",
     "check": "biome check --write",
     "format": "biome format --write"
   },
   "dependencies": {
-    "express": "^4.21.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.2"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
-    "@rsbuild/core": "^1.0.1",
-    "@rsbuild/plugin-react": "^1.0.1",
-    "@types/react": "^18.3.5",
+    "@remix-run/node": "^2.12.1",
+    "@rsbuild/core": "^1.0.9",
+    "@rsbuild/plugin-image-compress": "^1.0.2",
+    "@rsbuild/plugin-react": "^1.0.3",
+    "@rsbuild/plugin-type-check": "^1.0.1",
+    "@types/express": "^5.0.0",
+    "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
-    "typescript": "^5.5.2"
+    "compression": "^1.7.4",
+    "express": "^4.21.0",
+    "typescript": "^5.6.2"
   }
 }

@@ -1,45 +1,27 @@
-import { type RequestHandler, SetupMiddlewaresServer, defineConfig, logger } from '@rsbuild/core';
+import { defineConfig } from '@rsbuild/core';
 import { pluginReact } from '@rsbuild/plugin-react';
-
-export const serverRender = (api: SetupMiddlewaresServer): RequestHandler =>
-  async (_req, res, _next) => {
-    const indexModule = await api.environments.ssr.loadBundle<{render: () => string;}>('index');
-    const template = await api.environments.web.getTransformedHtml('index');
-    const markup = indexModule.render();
-    const html = template.replace('<!--app-content-->', markup);
-
-    res.writeHead(200, {
-      'Content-Type': 'text/html',
-    });
-    res.end(html);
-  };
+import { pluginImageCompress } from '@rsbuild/plugin-image-compress';
+import { pluginTypeCheck } from '@rsbuild/plugin-type-check';
 
 export default defineConfig({
-  plugins: [pluginReact()],
+  plugins: [pluginReact(), pluginImageCompress(), pluginTypeCheck()],
   dev: {
-    setupMiddlewares: [
-      ({ unshift }, serverAPI) => {
-        const serverRenderMiddleware = serverRender(serverAPI);
-
-        unshift(async (req, res, next) => {
-          if (req.method === 'GET' && req.url === '/') {
-            try {
-              await serverRenderMiddleware(req, res, next);
-            } catch (err) {
-              logger.error('SSR render error, downgrade to CSR...\n', err);
-              next();
-            }
-          } else {
-            next();
-          }
-        });
-      },
-    ],
+    hmr: true,
+    liveReload: true,
+  },
+  performance: {
+    removeConsole: process.env.NODE_ENV === 'production',
   },
   environments: {
     web: {
       output: {
         target: 'web',
+        sourceMap: {
+          js: false,
+        },
+        minify: {
+          js: false,
+        },
       },
       source: {
         entry: {
@@ -53,6 +35,7 @@ export default defineConfig({
         distPath: {
           root: 'dist/server',
         },
+        externals: ['fs', 'path'],
       },
       source: {
         entry: {
