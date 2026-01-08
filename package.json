@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
-    "@remix-run/node": "^2.12.1",
+    "@remix-run/node": "^2.17.2",
     "@rsbuild/core": "^1.0.9",
     "@rsbuild/plugin-image-compress": "^1.0.2",
     "@rsbuild/plugin-react": "^1.0.3",
